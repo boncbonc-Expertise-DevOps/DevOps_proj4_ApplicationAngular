@@ -130,5 +130,9 @@ docker compose down
 | Dev local | `ng serve` | 4200 |
 | Docker    | `Nginx`    | 80   |
 
+## 5) Scan Trivy sur image locale
 
+olympic-tracker:local (alpine 3.21.3)
+=====================================
+Total: 66 (UNKNOWN: 0, LOW: 9, MEDIUM: 37, HIGH: 15, CRITICAL: 5)
 
