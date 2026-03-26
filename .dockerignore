@@ -1,0 +1,11 @@
+node_modules
+dist
+.angular
+.git
+.gitignore
+.vscode
+reports
+coverage
+npm-debug.log*
+yarn-error.log*
+docker-compose*.yml
