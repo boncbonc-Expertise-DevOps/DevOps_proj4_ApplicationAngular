@@ -13,6 +13,8 @@ FROM nginx:1.27-alpine AS runtime
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /app/dist/olympic-games-starter/browser/ /app/
 
-EXPOSE 80
+USER nginx
+
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]

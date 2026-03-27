@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     image: olympic-tracker:local
     ports:
-      - "80:80"
+      - "80:8080"
     restart: unless-stopped
     networks:
       - olympic-tracker-net
