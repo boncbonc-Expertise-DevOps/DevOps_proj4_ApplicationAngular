@@ -136,3 +136,14 @@ olympic-tracker:local (alpine 3.21.3)
 =====================================
 Total: 66 (UNKNOWN: 0, LOW: 9, MEDIUM: 37, HIGH: 15, CRITICAL: 5)
 
+## 6) Sécurité ajoutée (mise à jour)
+
+Mesures de sécurité appliquées dans la configuration Docker actuelle :
+
+- Le conteneur Nginx s’exécute en utilisateur non-root (`USER nginx`) dans l’image runtime.
+- Nginx écoute en port non privilégié (`8080`) dans le conteneur, puis exposition via `docker-compose` en `80:8080`.
+- Les logs Nginx sont redirigés vers `stdout`/`stderr` pour un suivi standardisé côté conteneur.
+- Les fichiers `.env` sont ignorés par Git (`.gitignore`) pour éviter la publication involontaire de secrets.
+
+Cette configuration réduit la surface d’attaque (pas d’exécution root) tout en conservant un accès utilisateur simple sur `http://localhost`.
+
