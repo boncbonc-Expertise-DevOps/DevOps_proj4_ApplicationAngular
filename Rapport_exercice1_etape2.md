@@ -147,3 +147,5 @@ Mesures de sécurité appliquées dans la configuration Docker actuelle :
 
 Cette configuration réduit la surface d’attaque (pas d’exécution root) tout en conservant un accès utilisateur simple sur `http://localhost`.
 
+## 7) tag fin exercice 1
+tag v1.0.0-ex1 | baseline stable pour containarization
