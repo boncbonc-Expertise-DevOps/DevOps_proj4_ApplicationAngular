@@ -159,8 +159,6 @@ build_image:
 release_angular:
   stage: release
   image: node:22-bullseye
-  needs:
-    - build_image
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_COMMIT_MESSAGE =~ /^chore\(release\):/'
       when: never
