@@ -52,7 +52,6 @@ java_tests:
     key:
       files:
         - build.gradle
-        - settings.gradle
         - gradle/wrapper/gradle-wrapper.properties
     paths:
       - .gradle/caches/
