@@ -66,8 +66,76 @@ Dans le projet Angular :
 - Le push des images est limité aux pipelines déclenchés par `push`.
 - La branche de test `dev/test_ci` peut être conservée pour valider ce stage avant merge sur `main`.
 
+## Gestion des differences d'environnement entre local et CI
+Le fonctionnement local et le fonctionnement dans GitLab CI ne sont pas strictement identiques. En local, le developpeur dispose de Docker Desktop, d'un navigateur, d'eventuels fichiers `.env` et de ports choisis librement. En CI, le job s'execute dans un environnement ephemere pilote par les images declarees dans le pipeline, sans acces aux fichiers locaux du poste. Pour l'application Angular, cela implique notamment de distinguer le port de developpement habituel (`4200`) du port reel expose par l'image Docker (`8080` dans le conteneur, puis mappe localement). La configuration doit donc rester portable entre poste local, image Docker et pipeline CI, en s'appuyant sur les variables GitLab, les ports explicitement publies et des commandes de validation reproductibles.
+
 ## Limite actuelle
 Le stage `build` construit et publie l'image, mais il ne réalise pas encore de smoke test automatique du conteneur. Cette vérification pourra être ajoutée ensuite pour confirmer que l'image produite démarre correctement dans l'environnement CI.
+
+## Validation locale de l'image Angular (branche dev)
+La validation locale permet de confirmer que l'image publiee depuis la branche `dev/test_ci` demarre correctement avant merge sur `main`.
+
+### Prerequis
+- Docker Desktop demarre en local.
+- Un compte GitLab avec acces au projet.
+- Un token GitLab (PAT) avec au minimum le scope `read_registry`.
+
+### Commandes de validation
+1. Se connecter au GitLab Container Registry :
+
+```bash
+docker login registry.gitlab.com
+```
+
+Renseigner :
+- Username : utilisateur GitLab
+- Password : token PAT
+
+2. Recuperer l'image de la branche de dev :
+
+```bash
+docker pull registry.gitlab.com/boncbonc-devops/proj4/devops_proj4_applicationangular:dev-test-ci-1b070137
+```
+
+3. Lancer le conteneur en local :
+
+```bash
+docker run -d --name test-angular-local -p 4200:8080 registry.gitlab.com/boncbonc-devops/proj4/devops_proj4_applicationangular:dev-test-ci-1b070137
+```
+
+Note importante : le mapping est `4200:8080` car l'image Angular expose le port `8080` dans le conteneur.
+
+4. Verifier l'etat du conteneur :
+
+```bash
+docker ps --filter name=test-angular-local
+docker logs --tail 100 test-angular-local
+```
+
+5. Verifier la reponse HTTP de l'application :
+
+```bash
+curl -sS -o /dev/null -w "%{http_code}\n" http://127.0.0.1:4200/
+```
+
+Code attendu : `200`
+
+6. Validation visuelle dans le navigateur :
+
+- Ouvrir `http://127.0.0.1:4200`
+- Verifier que l'interface Angular se charge
+
+7. Nettoyage local :
+
+```bash
+docker rm -f test-angular-local
+```
+
+### Critere de succes
+L'image de la branche de dev est validee si :
+- le conteneur demarre sans erreur bloquante ;
+- l'application repond en HTTP `200` ;
+- l'interface est accessible dans le navigateur.
 
 ## Résultat attendu atteint
 - Le pipeline construit une image Docker.
