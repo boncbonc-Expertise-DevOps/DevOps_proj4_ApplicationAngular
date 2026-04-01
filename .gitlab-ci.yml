@@ -180,6 +180,6 @@ release_angular:
         echo "Missing required variable: GITLAB_TOKEN"
         exit 1
       fi
-    - npm ci --cache .npm --prefer-offline
+    - npm install --no-save --cache .npm --prefer-offline semantic-release@24.2.3 @semantic-release/npm@13.1.5 @semantic-release/gitlab@13.3.2 @semantic-release/changelog@6.0.3 @semantic-release/commit-analyzer@13.0.1 @semantic-release/release-notes-generator@14.1.0 @semantic-release/git@10.0.1
     - git fetch --tags
     - npx semantic-release
