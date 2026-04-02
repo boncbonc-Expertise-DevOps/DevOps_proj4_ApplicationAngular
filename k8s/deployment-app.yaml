@@ -14,7 +14,9 @@ spec:
     spec:
       containers:
       - name: olympic-games-app
-        # TODO: add the image of the application from the gitlab registry
+        image: registry.gitlab.com/boncbonc-devops/proj4/devops_proj4_applicationangular:latest
+        imagePullPolicy: Always
         ports:
-        - containerPort: 80
-      # TODO: define imagePullSecrets to use a docker-registry secret and authorize Kubenetes 
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: gitlab-registry-secret
