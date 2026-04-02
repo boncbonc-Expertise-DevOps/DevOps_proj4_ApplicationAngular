@@ -1,3 +1,10 @@
+# [2.1.0](https://gitlab.com/boncbonc-DevOps/proj4/DevOps_proj4_ApplicationAngular/compare/v2.0.1...v2.1.0) (2026-04-02)
+
+
+### Features
+
+* **ci:** taguer les images Docker avec la version semantic release ([a1b091d](https://gitlab.com/boncbonc-DevOps/proj4/DevOps_proj4_ApplicationAngular/commit/a1b091d6269b145229695b045c80f0410161022d))
+
 ## [2.0.1](https://gitlab.com/boncbonc-DevOps/proj4/DevOps_proj4_ApplicationAngular/compare/v2.0.0...v2.0.1) (2026-04-02)
 
 
