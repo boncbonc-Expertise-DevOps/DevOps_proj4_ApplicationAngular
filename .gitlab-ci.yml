@@ -157,6 +157,9 @@ build_image:
 release_angular:
   stage: release
   image: node:22-bullseye
+  services:
+    - name: docker:27.5.1-dind
+      alias: docker
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_COMMIT_MESSAGE =~ /^chore\(release\):/'
       when: never
@@ -166,18 +169,22 @@ release_angular:
   variables:
     GIT_DEPTH: "0"
     GIT_STRATEGY: fetch
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
   cache:
     key:
       files:
         - package-lock.json
     paths:
       - .npm/
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq --no-install-recommends docker.io
   script:
     - |
       if [ -z "$GITLAB_TOKEN" ]; then
         echo "Missing required variable: GITLAB_TOKEN"
         exit 1
       fi
-    - npm install --no-save --cache .npm --prefer-offline semantic-release@24.2.3 @semantic-release/npm@13.1.5 @semantic-release/gitlab@13.3.2 @semantic-release/changelog@6.0.3 @semantic-release/commit-analyzer@13.0.1 @semantic-release/release-notes-generator@14.1.0 @semantic-release/git@10.0.1
+    - npm install --no-save --cache .npm --prefer-offline semantic-release@24.2.3 @semantic-release/npm@13.1.5 @semantic-release/gitlab@13.3.2 @semantic-release/changelog@6.0.3 @semantic-release/commit-analyzer@13.0.1 @semantic-release/release-notes-generator@14.1.0 @semantic-release/git@10.0.1 @semantic-release/exec@7.1.0
     - git fetch --tags
     - npx semantic-release
